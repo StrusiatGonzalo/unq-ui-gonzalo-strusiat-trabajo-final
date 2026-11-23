@@ -2,6 +2,8 @@ import { useRef, useState } from "react";
 import { validateWord, cleanWord } from "./../utils/validations.js";
 import { checkInDictionary } from "./../service/api.js"
 import { useTimer } from "../hooks/useTimer";
+import { useFirstVisit } from "../hooks/useFirstVisit";
+import HowToPlayModal from "./HowToPlayModal";
 
 const MESSAGES = {
     empty: "Escribí una palabra",
@@ -23,6 +25,7 @@ function Game() {
     const [isVerifying, setIsVerifying] = useState(false);
     const [gameStatus, setGameStatus] = useState("waiting"); // "waiting", "playing", "finished"
 
+    const { isOpen, closeModal, openModal } = useFirstVisit();
     const inputRef = useRef(null);
     const score = words.reduce((acc, w) => acc + w.display.length, 0);
     const count = words.length;
@@ -87,7 +90,10 @@ function Game() {
 
     return (
         <div>
-            <h1 className="font-title text-center">Palabras Encadenadas</h1>
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <h1 className="font-title m-0">Palabras Encadenadas</h1>
+                <button className="btn btn-outline-dark rounded-circle fw-bold fs-5 px-3" onClick={openModal}>?</button>
+            </div>
 
             <div>
                 <span>Puntaje: {score}</span>
@@ -134,6 +140,7 @@ function Game() {
                     </button>
                 </div>
             )}
+            <HowToPlayModal isOpen={isOpen} onClose={closeModal} />
         </div>
     );
 }
