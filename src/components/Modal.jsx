@@ -14,19 +14,18 @@ function Modal({ isOpen, onClose, title, children }) {
 
     return (
         <div
-            className="modal d-block"
-            style={{ backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1050 }}
+            className="modal d-block modal-overlay"
             onClick={onClose}
         >
             <div
                 className="modal-dialog modal-dialog-centered"
-                onClick={(e) => e.stopPropagation()} // Evita que se cierre al hacer clic adentro
+                onClick={(e) => e.stopPropagation()}
             >
-                <div className="modal-content rounded-0 border-2 border-dark">
-                    <div className="modal-header border-bottom-2 border-dark">
-                        <h5 className="modal-title fw-bold text-uppercase">{title}</h5>
+                <div className="modal-content modal-content-retro">
+                    <div className="modal-header border-bottom-0 pb-0">
+                        <h5 className="modal-title fw-bold text-uppercase fs-4">{title}</h5>
                     </div>
-                    <div className="modal-body">
+                    <div className="modal-body fs-5">
                         {children}
                     </div>
                 </div>

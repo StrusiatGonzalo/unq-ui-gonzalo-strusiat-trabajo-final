@@ -38,6 +38,8 @@ function Game() {
         setMessage("¡Fin de la partida!");
     });
 
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (gameStatus === "finished") return;
@@ -89,57 +91,105 @@ function Game() {
     };
 
     return (
-        <div>
-            <div className="d-flex justify-content-between align-items-center mb-4">
-                <h1 className="font-title m-0">Palabras Encadenadas</h1>
-                <button className="btn btn-outline-dark rounded-circle fw-bold fs-5 px-3" onClick={openModal}>?</button>
+        <div className="game-container">
+            <div className="d-flex justify-content-between align-items-center mb-5">
+                <h1 className="fw-bold fs-3 m-0 text-uppercase">Palabras Encadenadas</h1>
+                <button className="btn-retro rounded-circle px-3 py-1 fs-5" onClick={openModal}>?</button>
             </div>
 
-            <div>
-                <span>Puntaje: {score}</span>
-                {" . "}
-                <span>Palabras: {count}</span>
-                {" . "}
-                <span>Letra: {nextLetter ?? "cualquiera"}</span>
+            <div className="row mb-4 g-4">
+                <div className="col-6">
+                    <div className="box-border p-3">
+                        <span className="text-muted fw-bold small d-block mb-1">TIEMPO</span>
+                        <div className="fs-1 fw-bold lh-1">
+                            0:{secondsLeft.toString().padStart(2, "0")}
+                        </div>
+                    </div>
+                </div>
+                <div className="col-6">
+                    <div className="box-border p-3 text-end">
+                        <span className="text-muted fw-bold small d-block mb-1">PUNTAJE</span>
+                        <div className="fs-1 fw-bold lh-1">{score}</div>
+                    </div>
+                </div>
             </div>
-            <div>
-                <span>Tiempo: {secondsLeft}s</span>
+
+            <div className="time-bar-bg mb-5">
+                <div
+                    className={`time-bar-fill time-${secondsLeft}`}
+                ></div>
             </div>
-            <form onSubmit={handleSubmit}>
-                <input type="text"
+
+            {gameStatus === "finished" ? (
+                <div className="box-border p-5 text-center mb-4">
+                    <h2 className="fw-bold text-uppercase mb-3">Fin de la partida</h2>
+                    <h1 className="display-1 fw-bold lh-1 mb-2">{score} Puntos</h1>
+                    <p className="text-muted fs-5 mb-4">{count} palabras encadenadas</p>
+
+                    <button
+                        className="btn-retro px-5 py-3 fs-5"
+                        onClick={handleRestart}
+                    >
+                        Jugar de nuevo
+                    </button>
+                </div>
+            ) : (
+                <div className="word-chain-container mb-3 min-h-120">
+                    <div className="d-flex flex-wrap gap-3">
+                        {words.length === 0 ? (
+                            <p className="empty-chain-text">Tu cadena va a aparecer acá.</p>
+                        ) : (
+                            words.map((w, index) => {
+                                const isLast = index === words.length - 1;
+                                return (
+                                    <div
+                                        key={w.clean}
+                                        className="d-flex align-items-center gap-2"
+                                    >
+                                        {index > 0 && <span className="chain-arrow">→</span>}
+
+                                        <div className={`word-block ${isLast ? "active" : ""}`}>
+                                            {w.display}
+                                        </div>
+                                    </div>
+                                );
+                            })
+                        )}
+                    </div>
+                </div>
+            )}
+
+            <div className="mb-3 fw-bold fs-5 min-h-30">
+                {message && (
+                    <span className={message === "Bien!" ? "text-success" : "text-danger"}>
+                        {message}
+                    </span>
+                )}
+            </div>
+
+            <form onSubmit={handleSubmit} className="d-flex gap-3 mb-5">
+                <input
+                    type="text"
+                    className="form-control input-retro"
                     autoFocus
                     ref={inputRef}
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder={
-                        nextLetter ? `Empieza con ${nextLetter}…` : "Escribí una palabra"
+                        nextLetter
+                            ? `La próxima empieza con «${nextLetter.toUpperCase()}»...`
+                            : "Escribí una palabra..."
                     }
                     disabled={gameStatus === "finished"}
-
                 />
-                <button type="submit" disabled={isVerifying || gameStatus === "finished"}>
-                    {isVerifying ? "Verificando…" : "Enviar"}
+                <button
+                    className="btn-retro px-4"
+                    type="submit"
+                    disabled={isVerifying || gameStatus === "finished"}
+                >
+                    {isVerifying ? "..." : "Enviar"}
                 </button>
             </form>
-
-            <p>{message}</p>
-
-            <ul>
-                {words.map((w) => (
-                    <li key={w.clean}>{w.display}</li>
-                ))}
-            </ul>
-            {gameStatus === "finished" && (
-                <div style={{ border: "2px solid red", padding: "10px", marginTop: "20px" }}>
-                    <h2>Fin de la partida</h2>
-                    <p>Encadenaste {count} palabras.</p>
-                    <p>Puntaje final: {score}</p>
-
-                    <button onClick={handleRestart}>
-                        Jugar de nuevo
-                    </button>
-                </div>
-            )}
             <HowToPlayModal isOpen={isOpen} onClose={closeModal} />
         </div>
     );

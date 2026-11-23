@@ -12,7 +12,7 @@ const isRepeatedWord = (word, usedWords = []) => {
     return usedWords.some((u) => u.clean === cleanedWord);
 };
 
-const isSingleWord = (word) => !/\s/.test(word); // es para ver si el jugador escribio mas de una palabra
+const isSingleWord = (word) => !/\s/.test(word);
 
 const chainsWithLast = (word, lastWord) => {
     if (!lastWord) return true;
