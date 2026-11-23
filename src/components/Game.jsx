@@ -4,6 +4,9 @@ import { checkInDictionary } from "./../service/api.js"
 import { useTimer } from "../hooks/useTimer";
 import { useFirstVisit } from "../hooks/useFirstVisit";
 import HowToPlayModal from "./HowToPlayModal";
+import MetricsBar from "./MetricsBar";
+import WordChain from "./WordChain";
+import GameMessage from "./GameMessage";
 
 const MESSAGES = {
     empty: "Escribí una palabra",
@@ -96,24 +99,7 @@ function Game() {
                 <h1 className="fw-bold fs-3 m-0 text-uppercase">Palabras Encadenadas</h1>
                 <button className="btn-retro rounded-circle px-3 py-1 fs-5" onClick={openModal}>?</button>
             </div>
-
-            <div className="row mb-4 g-4">
-                <div className="col-6">
-                    <div className="box-border p-3">
-                        <span className="text-muted fw-bold small d-block mb-1">TIEMPO</span>
-                        <div className="fs-1 fw-bold lh-1">
-                            0:{secondsLeft.toString().padStart(2, "0")}
-                        </div>
-                    </div>
-                </div>
-                <div className="col-6">
-                    <div className="box-border p-3 text-end">
-                        <span className="text-muted fw-bold small d-block mb-1">PUNTAJE</span>
-                        <div className="fs-1 fw-bold lh-1">{score}</div>
-                    </div>
-                </div>
-            </div>
-
+            <MetricsBar secondsLeft={secondsLeft} score={score} />
             <div className="time-bar-bg mb-5">
                 <div
                     className={`time-bar-fill time-${secondsLeft}`}
@@ -134,38 +120,10 @@ function Game() {
                     </button>
                 </div>
             ) : (
-                <div className="word-chain-container mb-3 min-h-120">
-                    <div className="d-flex flex-wrap gap-3">
-                        {words.length === 0 ? (
-                            <p className="empty-chain-text">Tu cadena va a aparecer acá.</p>
-                        ) : (
-                            words.map((w, index) => {
-                                const isLast = index === words.length - 1;
-                                return (
-                                    <div
-                                        key={w.clean}
-                                        className="d-flex align-items-center gap-2"
-                                    >
-                                        {index > 0 && <span className="chain-arrow">→</span>}
-
-                                        <div className={`word-block ${isLast ? "active" : ""}`}>
-                                            {w.display}
-                                        </div>
-                                    </div>
-                                );
-                            })
-                        )}
-                    </div>
-                </div>
+                <WordChain words={words} />
             )}
 
-            <div className="mb-3 fw-bold fs-5 min-h-30">
-                {message && (
-                    <span className={message === "Bien!" ? "text-success" : "text-danger"}>
-                        {message}
-                    </span>
-                )}
-            </div>
+            <GameMessage message={message} />
 
             <form onSubmit={handleSubmit} className="d-flex gap-3 mb-5">
                 <input
