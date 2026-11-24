@@ -45,6 +45,7 @@ cadena que logres sostener antes de que el reloj llegue a cero, más puntos sum�
   a 15 con cada palabra válida. Si llega a 0, la partida termina.
 - Al finalizar, se muestra el puntaje total, la cantidad de palabras y un botón para
   jugar de nuevo sin recargar la página.
+- Si el puntaje entra en el Top 10, se puede guardar en el ranking con un nombre.
 
 ## Decisiones de diseño
 
@@ -74,6 +75,21 @@ consulta la API para saber si la palabra existe en el diccionario.
   reloj guarda la hora de finalización en un `useRef` y calcula cuánto falta comparándola
   con el reloj de la computadora.
 
+### Ranking
+
+- **Top 10 de puntajes:** el ranking guarda los 10 mejores puntajes, ordenados de mayor a
+  menor. Cuando ya hay 10 puestos, un puntaje solo entra si supera al último; un puntaje
+  de 0 nunca entra.
+- **Guardado en el navegador:** se usa `localStorage`, así que el ranking se mantiene al
+  recargar la página, pero es propio de cada navegador (no hay servidor de por medio). Si
+  la lectura o la escritura falla, el error se captura y el juego sigue funcionando.
+- **Qué se guarda:** nombre, puntaje, cantidad de palabras y fecha de la partida.
+- **Nombre del jugador:** al terminar una partida que entra en el Top 10, se pide un
+  nombre de hasta 15 caracteres. No se puede guardar con el nombre vacío, y una vez
+  guardado el puntaje no se puede volver a enviar.
+- **Ventana de ranking:** los puntajes se muestran en un modal llamado "Mejores Puntajes".
+  Si todavía no hay ninguno, se invita al jugador a jugar una partida.
+  
 ### Experiencia de usuario
 
 - **Input deshabilitado durante la consulta:** el input se deshabilita mientras se espera
@@ -94,12 +110,15 @@ src/
 ├── components/
 │   ├── Game.jsx             // Lógica principal, inputs y vista de la partida
 │   ├── GameMessage.jsx      // Mensajes de validación (verde si es válida, rojo si hay error)
+│   ├── GameOver.jsx         // Pantalla de fin de partida con el resultado
 │   ├── HowToPlayModal.jsx   // Instrucciones del juego usando el Modal
 │   ├── MetricsBar.jsx       // Tiempo restante, puntaje y barra de tiempo
 │   ├── Modal.jsx            // Componente visual de ventana reutilizable
+│   ├── RankingModal.jsx     // Ventana con el ranking de puntajes usando el Modal
 │   └── WordChain.jsx        // Cadena de palabras ingresadas durante la partida
 ├── hooks/
 │   ├── useFirstVisit.js     // Controla si es la primera visita para abrir el modal
+│   ├── useRanking.js        // Lógica del ranking de puntajes
 │   └── useTimer.js          // Lógica del reloj con cuenta regresiva y reset
 ├── service/
 │   └── api.js               // API de validación con axios
