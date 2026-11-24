@@ -154,8 +154,9 @@ body::after {
   padding-bottom: 4px;
 }
 
-.min-h-120 { min-height: 120px; }
-.min-h-30 { min-height: 30px; }
+.min-h-30 {
+  min-height: 30px; 
+}
 
 .empty-chain-text {
   color: #000;

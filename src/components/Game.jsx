@@ -7,6 +7,9 @@ import HowToPlayModal from "./HowToPlayModal";
 import MetricsBar from "./MetricsBar";
 import WordChain from "./WordChain";
 import GameMessage from "./GameMessage";
+import { useRanking } from "../hooks/useRanking";
+import GameOver from "./GameOver";
+import RankingModal from "./RankingModal";
 
 const MESSAGES = {
     empty: "Escribí una palabra",
@@ -26,7 +29,8 @@ function Game() {
     const [words, setWords] = useState([]);
     const [message, setMessage] = useState("");
     const [isVerifying, setIsVerifying] = useState(false);
-    const [gameStatus, setGameStatus] = useState("waiting"); // "waiting", "playing", "finished"
+    const [gameStatus, setGameStatus] = useState("waiting");
+    const [isRankingOpen, setIsRankingOpen] = useState(false);
 
     const { isOpen, closeModal, openModal } = useFirstVisit();
     const inputRef = useRef(null);
@@ -40,9 +44,9 @@ function Game() {
         setGameStatus("finished");
         setMessage("¡Fin de la partida!");
     });
+    const { ranking, saveScore, isTopScore } = useRanking();
 
-
-
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (gameStatus === "finished") return;
@@ -97,7 +101,12 @@ function Game() {
         <div className="game-container">
             <div className="d-flex justify-content-between align-items-center mb-5">
                 <h1 className="fw-bold fs-3 m-0 text-uppercase">Palabras Encadenadas</h1>
-                <button className="btn-retro rounded-circle px-3 py-1 fs-5" onClick={openModal}>?</button>
+                <div className="d-flex gap-2">
+                    <button className="btn-retro px-3 py-1 fs-5" onClick={() => setIsRankingOpen(true)}>
+                        🏆︎
+                    </button>
+                    <button className="btn-retro rounded-circle px-3 py-1 fs-5" onClick={openModal}>?</button>
+                </div>
             </div>
             <MetricsBar secondsLeft={secondsLeft} score={score} />
             <div className="time-bar-bg mb-5">
@@ -107,18 +116,13 @@ function Game() {
             </div>
 
             {gameStatus === "finished" ? (
-                <div className="box-border p-5 text-center mb-4">
-                    <h2 className="fw-bold text-uppercase mb-3">Fin de la partida</h2>
-                    <h1 className="display-1 fw-bold lh-1 mb-2">{score} Puntos</h1>
-                    <p className="text-muted fs-5 mb-4">{count} palabras encadenadas</p>
-
-                    <button
-                        className="btn-retro px-5 py-3 fs-5"
-                        onClick={handleRestart}
-                    >
-                        Jugar de nuevo
-                    </button>
-                </div>
+                <GameOver
+                    score={score}
+                    count={count}
+                    handleRestart={handleRestart}
+                    saveScore={saveScore}
+                    isTopScore={isTopScore}
+                />
             ) : (
                 <WordChain words={words} />
             )}
@@ -149,6 +153,7 @@ function Game() {
                 </button>
             </form>
             <HowToPlayModal isOpen={isOpen} onClose={closeModal} />
+            <RankingModal isOpen={isRankingOpen} onClose={() => setIsRankingOpen(false)} ranking={ranking} />
         </div>
     );
 }
