@@ -15,7 +15,6 @@ function Modal({ isOpen, onClose, title, children }) {
     return (
         <div
             className="modal d-block modal-overlay"
-            onClick={onClose}
         >
             <div
                 className="modal-dialog modal-dialog-centered"
