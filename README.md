@@ -93,16 +93,20 @@ consulta la API para saber si la palabra existe en el diccionario.
 src/
 ├── components/
 │   ├── Game.jsx             // Lógica principal, inputs y vista de la partida
+│   ├── GameMessage.jsx      // Mensajes de validación (verde si es válida, rojo si hay error)
+│   ├── HowToPlayModal.jsx   // Instrucciones del juego usando el Modal
+│   ├── MetricsBar.jsx       // Tiempo restante, puntaje y barra de tiempo
 │   ├── Modal.jsx            // Componente visual de ventana reutilizable
-│   └── HowToPlayModal.jsx   // Instrucciones del juego usando el Modal
+│   └── WordChain.jsx        // Cadena de palabras ingresadas durante la partida
 ├── hooks/
-│   ├── useTimer.js          // Lógica del reloj con cuenta regresiva y reset
-│   └── useFirstVisit.js     // Controla si es la primera visita para abrir el modal
+│   ├── useFirstVisit.js     // Controla si es la primera visita para abrir el modal
+│   └── useTimer.js          // Lógica del reloj con cuenta regresiva y reset
 ├── service/
 │   └── api.js               // API de validación con axios
 ├── utils/
 │   └── validations.js       // Reglas de validación de palabras, normalización y limpieza
 ├── App.jsx                  // Componente raíz que renderiza Game
+├── index.css                // Estilos personalizados (estética retro)
 └── main.jsx                 // Punto de entrada e importación de estilos
 ```
 
