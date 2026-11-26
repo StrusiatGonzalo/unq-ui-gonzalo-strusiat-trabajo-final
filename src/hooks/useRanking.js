@@ -1,18 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const STORAGE_KEY = "palabras-encadenadas-ranking";
 
 export function useRanking() {
-    const [ranking, setRanking] = useState([]);
-
-    useEffect(() => {
+    const [ranking, setRanking] = useState(() => {
         try {
             const saved = localStorage.getItem(STORAGE_KEY);
-            if (saved) setRanking(JSON.parse(saved));
+            return saved ? JSON.parse(saved) : [];
         } catch (error) {
             console.error("Error al leer el ranking", error);
+            return [];
         }
-    }, []);
+    });
 
     const saveScore = (name, score, wordsCount) => {
         const newEntry = {

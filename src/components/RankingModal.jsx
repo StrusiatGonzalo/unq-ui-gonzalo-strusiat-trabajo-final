@@ -9,7 +9,7 @@ function RankingModal({ isOpen, onClose, ranking }) {
                 </p>
             ) : (
                 <ol className="list-group list-group-numbered mb-3">
-                    {ranking.map((r, index) => (
+                    {ranking.map((r) => (
                         <li key={r.id} className="list-group-item d-flex justify-content-between align-items-center border-dark border-2 mb-1">
                             <span className="fw-bold">{r.name}</span>
                             <span className="badge bg-dark rounded-0 fs-6">{r.score} pts</span>

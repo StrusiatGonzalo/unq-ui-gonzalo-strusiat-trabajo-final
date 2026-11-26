@@ -59,9 +59,9 @@ consulta la API para saber si la palabra existe en el diccionario.
 - **Mínimo de 2 letras:** se exige un mínimo de 2 letras, rechazando palabras de una
   sola letra (como "a" o "y") para que las cadenas sean más interesantes.
 - **Tildes y la Ñ:** para comparar si una palabra encadena o está repetida, el sistema
-  normaliza el texto (pasa todo a minúsculas y elimina las tildes de las vocales), pero
-  conserva la "ñ" y la "ü" para respetar el idioma español. Las palabras se muestran en
-  pantalla con sus tildes originales (por ejemplo, "árbol").
+  normaliza el texto: pasa todo a minúsculas y elimina las tildes y la diéresis (por
+  ejemplo, "pingüino" se compara como "pinguino"), pero conserva la "ñ". Las palabras se
+  muestran en pantalla con sus tildes originales (por ejemplo, "árbol").
 - **Espacios:** no se permiten espacios en el input. Si el jugador escribe dos palabras
   separadas por un espacio, el sistema lo detecta y lo rechaza antes de llamar a la API.
 - **Manejo de errores de red:** si la API falla (por ejemplo, por falta de conexión a
@@ -95,8 +95,10 @@ consulta la API para saber si la palabra existe en el diccionario.
   
 ### Experiencia de usuario
 
-- **Input deshabilitado durante la consulta:** el input se deshabilita mientras se espera
-  la respuesta de la API para evitar que el jugador envíe dos palabras al mismo tiempo.
+- **Envío bloqueado durante la consulta:** mientras se espera la respuesta de la API, el
+  botón "Enviar" se deshabilita y muestra "..."; si se presiona Enter, el envío se ignora.
+  Así se evita que el jugador envíe dos palabras al mismo tiempo. El input sigue
+  habilitado, por lo que se puede ir escribiendo la próxima palabra.
 - **Foco automático:** el input recupera el foco automáticamente después de cada envío
   (sea válido o inválido) para agilizar el ritmo del juego y no tener que hacer clic con
   el mouse cada vez.
