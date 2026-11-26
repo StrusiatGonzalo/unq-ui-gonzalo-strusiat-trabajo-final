@@ -34,6 +34,7 @@ function Game() {
 
     const { isOpen, closeModal, openModal } = useFirstVisit();
     const inputRef = useRef(null);
+    const gameIdRef = useRef(0);
     const score = words.reduce((acc, w) => acc + w.display.length, 0);
     const count = words.length;
     const nextLetter = words.length > 0
@@ -41,6 +42,7 @@ function Game() {
         : null;
 
     const { secondsLeft, start, reset: resetTimer } = useTimer(15, () => {
+        gameIdRef.current += 1;
         setGameStatus("finished");
         setMessage("¡Fin de la partida!");
     });
@@ -62,11 +64,14 @@ function Game() {
         const display = input.trim().toLowerCase();
         const clean = cleanWord(input);
 
+        const gameId = gameIdRef.current;
         setIsVerifying(true);
         setMessage("");
 
         try {
             const res = await checkInDictionary(clean);
+            if (gameId !== gameIdRef.current) return;
+
             if (res.data.exists) {
                 setWords((prev) => [...prev, { display, clean }]);
                 setInput("");
@@ -77,15 +82,16 @@ function Game() {
                 setMessage(MESSAGES.not_found);
             }
         } catch {
+            if (gameId !== gameIdRef.current) return;
             setMessage(MESSAGES.api_error);
         } finally {
             setIsVerifying(false);
-            inputRef.current.focus();
+            if (gameId === gameIdRef.current) inputRef.current?.focus();
         }
-
     };
 
     const handleRestart = () => {
+        gameIdRef.current += 1;
         setWords([]);
         setMessage("");
         setInput("");

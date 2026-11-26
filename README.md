@@ -74,6 +74,9 @@ consulta la API para saber si la palabra existe en el diccionario.
   desincronizaciones (por ejemplo, si el navegador se pausa o se cambia de pestaña), el
   reloj guarda la hora de finalización en un `useRef` y calcula cuánto falta comparándola
   con el reloj de la computadora.
+- **El reloj no se pausa mientras se verifica una palabra:** si el tiempo se termina
+  mientras se espera la respuesta de la API, la partida termina igual y esa palabra no
+  suma.
 
 ### Ranking
 
