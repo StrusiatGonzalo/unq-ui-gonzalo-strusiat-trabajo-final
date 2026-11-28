@@ -86,7 +86,7 @@ consulta la API para saber si la palabra existe en el diccionario.
 - **Guardado en el navegador:** se usa `localStorage`, así que el ranking se mantiene al
   recargar la página, pero es propio de cada navegador (no hay servidor de por medio). Si
   la lectura o la escritura falla, el error se captura y el juego sigue funcionando.
-- **Qué se guarda:** nombre, puntaje, cantidad de palabras y fecha de la partida.
+- **Qué se guarda:** nombre y puntaje.
 - **Nombre del jugador:** al terminar una partida que entra en el Top 10, se pide un
   nombre de hasta 15 caracteres. No se puede guardar con el nombre vacío, y una vez
   guardado el puntaje no se puede volver a enviar.
